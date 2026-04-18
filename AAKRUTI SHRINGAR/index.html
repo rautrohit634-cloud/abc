@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AAKRUTI SHRINGAR – Cosmetic Delivery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<header id="navbar">
+  <div class="nav-inner">
+    <div class="brand">
+      <span class="brand-hi">AAKRUTI</span>
+      <span class="brand-lo">SHRINGAR</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="orders.html" style="color:var(--gold);font-weight:500">📋 Orders</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="cartBtn" onclick="toggleCart()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartCount">0</span>
+      </button>
+      <button class="nav-cta" onclick="document.getElementById('orderModal').classList.add('open')">Order Now</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ Premium Cosmetics, Delivered</p>
+    <h1 class="hero-title">Beauty<br/><em>Delivered to<br/>Your Door</em></h1>
+    <p class="hero-sub">Curated skincare, makeup & wellness products<br/>delivered across India within 24–48 hours.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Explore Collection</a>
+      <a href="#about" class="btn-ghost">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-badge">
+    <svg viewBox="0 0 120 120" width="120" height="120">
+      <defs><path id="circle" d="M 60,60 m -45,0 a 45,45 0 1,1 90,0 a 45,45 0 1,1 -90,0"/></defs>
+      <text font-size="12" font-family="Jost" fill="#c9a96e" letter-spacing="3">
+        <textPath href="#circle">FREE DELIVERY • AUTHENTIC • PREMIUM QUALITY •</textPath>
+      </text>
+    </svg>
+    <span class="badge-icon">✦</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>LIPSTICK</span><span>✦</span>
+    <span>FOUNDATION</span><span>✦</span>
+    <span>SKINCARE</span><span>✦</span>
+    <span>PERFUME</span><span>✦</span>
+    <span>NAIL ART</span><span>✦</span>
+    <span>EYE LINER</span><span>✦</span>
+    <span>BLUSH</span><span>✦</span>
+    <span>SERUM</span><span>✦</span>
+    <span>LIPSTICK</span><span>✦</span>
+    <span>FOUNDATION</span><span>✦</span>
+    <span>SKINCARE</span><span>✦</span>
+    <span>PERFUME</span><span>✦</span>
+    <span>NAIL ART</span><span>✦</span>
+    <span>EYE LINER</span><span>✦</span>
+    <span>BLUSH</span><span>✦</span>
+    <span>SERUM</span><span>✦</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🚚</div>
+      <h3>Fast Delivery</h3>
+      <p>Doorstep delivery within 24–48 hours across Maharashtra and PAN India.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">✅</div>
+      <h3>100% Authentic</h3>
+      <p>Every product is sourced directly from verified brand distributors.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">💌</div>
+      <h3>Gift Wrapping</h3>
+      <p>Complimentary luxury gift wrapping for all orders above ₹999.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔄</div>
+      <h3>Easy Returns</h3>
+      <p>Hassle-free 7-day return policy on all unopened products.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="products-section">
+  <div class="section-header">
+    <p class="section-eyebrow">✦ Our Collection</p>
+    <h2>Bestsellers</h2>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="filter-tabs">
+    <button class="tab active" onclick="filterProducts('all', this)">All</button>
+    <button class="tab" onclick="filterProducts('lips', this)">Lips</button>
+    <button class="tab" onclick="filterProducts('skin', this)">Skincare</button>
+    <button class="tab" onclick="filterProducts('eyes', this)">Eyes</button>
+    <button class="tab" onclick="filterProducts('fragrance', this)">Fragrance</button>
+  </div>
+
+  <div class="products-grid" id="productsGrid">
+    <!-- Lips -->
+    <div class="product-card" data-cat="lips">
+      <div class="product-img" style="background:linear-gradient(135deg,#f7d1d1,#e8a0a0)">
+        <div class="product-emoji">💄</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Lips</span>
+        <h3>Velvet Matte Lipstick</h3>
+        <p>Long-lasting 12hr formula in 24 shades</p>
+        <div class="prod-footer">
+          <span class="price">₹499</span>
+          <button class="add-btn" onclick="addToCart('Velvet Matte Lipstick', 499)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="lips">
+      <div class="product-img" style="background:linear-gradient(135deg,#fde8d8,#f5b891)">
+        <div class="product-emoji">🫦</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Lips</span>
+        <h3>Glossy Lip Butter</h3>
+        <p>Hydrating & plumping, 8 sheer shades</p>
+        <div class="prod-footer">
+          <span class="price">₹349</span>
+          <button class="add-btn" onclick="addToCart('Glossy Lip Butter', 349)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skin -->
+    <div class="product-card" data-cat="skin">
+      <div class="product-img" style="background:linear-gradient(135deg,#e8f4f1,#a8d5c7)">
+        <div class="product-emoji">🧴</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Skincare</span>
+        <h3>Vitamin C Brightening Serum</h3>
+        <p>Fade dark spots, boost radiance daily</p>
+        <div class="prod-footer">
+          <span class="price">₹899</span>
+          <button class="add-btn" onclick="addToCart('Vitamin C Serum', 899)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="skin">
+      <div class="product-img" style="background:linear-gradient(135deg,#fef9e7,#f5deb3)">
+        <div class="product-emoji">🌿</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Skincare</span>
+        <h3>Kumkumadi Night Cream</h3>
+        <p>Ayurvedic saffron-based anti-aging cream</p>
+        <div class="prod-footer">
+          <span class="price">₹749</span>
+          <button class="add-btn" onclick="addToCart('Kumkumadi Night Cream', 749)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Eyes -->
+    <div class="product-card" data-cat="eyes">
+      <div class="product-img" style="background:linear-gradient(135deg,#e8e0f4,#c5aee8)">
+        <div class="product-emoji">👁️</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Eyes</span>
+        <h3>Kohl Kajal Intense</h3>
+        <p>Smudge-proof, 24hr waterproof formula</p>
+        <div class="prod-footer">
+          <span class="price">₹299</span>
+          <button class="add-btn" onclick="addToCart('Kohl Kajal Intense', 299)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="eyes">
+      <div class="product-img" style="background:linear-gradient(135deg,#fdf2e0,#f0c070)">
+        <div class="product-emoji">✨</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Eyes</span>
+        <h3>Shimmer Eye Palette</h3>
+        <p>12 ultra-pigmented warm nude shades</p>
+        <div class="prod-footer">
+          <span class="price">₹1,199</span>
+          <button class="add-btn" onclick="addToCart('Shimmer Eye Palette', 1199)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fragrance -->
+    <div class="product-card" data-cat="fragrance">
+      <div class="product-img" style="background:linear-gradient(135deg,#f0e6f8,#d4a0e8)">
+        <div class="product-emoji">🌸</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Fragrance</span>
+        <h3>Rose Oud Eau de Parfum</h3>
+        <p>Rich floral oriental, 50ml long-lasting</p>
+        <div class="prod-footer">
+          <span class="price">₹1,599</span>
+          <button class="add-btn" onclick="addToCart('Rose Oud EDP', 1599)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="fragrance">
+      <div class="product-img" style="background:linear-gradient(135deg,#e0f0ff,#90c8f8)">
+        <div class="product-emoji">💎</div>
+      </div>
+      <div class="product-info">
+        <span class="prod-tag">Fragrance</span>
+        <h3>Aqua Bloom Body Mist</h3>
+        <p>Light fresh citrus, perfect daily spritz</p>
+        <div class="prod-footer">
+          <span class="price">₹449</span>
+          <button class="add-btn" onclick="addToCart('Aqua Bloom Body Mist', 449)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about-section">
+  <div class="about-inner">
+    <div class="about-text">
+      <p class="section-eyebrow">✦ Our Story</p>
+      <h2>Bringing Beauty<br/><em>Closer to You</em></h2>
+      <p>AAKRUTI SHRINGAR was born from a simple belief — every woman deserves access to premium beauty without leaving home. Based in Latur, Maharashtra, we deliver authentic cosmetics from top Indian and international brands right to your doorstep.</p>
+      <p>From everyday essentials to luxury indulgences, we hand-pick each product for quality, safety, and efficacy. Our team of beauty enthusiasts curates collections that celebrate every skin tone and beauty ritual.</p>
+     </div>
+    <div class="about-visual">
+      <div class="about-blob">
+        <div class="about-inner-blob">
+          <span style="font-size:5rem;">💄</span>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#c9a96e;margin-top:1rem;">Pure Elegance</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header">
+    <p class="section-eyebrow">✦ Reviews</p>
+    <h2>What Our Customers Say</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Amazing quality products at great prices! The delivery was super fast and packaging was beautiful."</p>
+      <div class="testi-author">— Rohit Raut, Pune</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Finally a cosmetic delivery service that genuinely cares about authenticity. Will order again!"</p>
+      <div class="testi-author">— Nikhil Ramthirthe, Pune</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"The gift wrapping was so elegant. My friend loved the surprise order. Highly recommended!"</p>
+      <div class="testi-author"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <p class="section-eyebrow">✦ Get in Touch</p>
+      <h2>We'd Love<br/>to Hear From You</h2>
+      <div class="contact-details">
+        <div class="c-item">📍 <span>Pune, Maharashtra, India</span></div>
+        <div class="c-item">📞 <span>+91 8767161327</span></div>
+        <div class="c-item">📧 <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e78f828b8b88a786868c9592938e948f958e89808695c98e89">[email&#160;protected]</a></span></div>
+        <div class="c-item">🕐 <span>Mon–Sat, 9am–8pm</span></div>
+      </div>
+    </div>
+    <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+      <h3>Send a Message</h3>
+      <input type="text" id="cName" placeholder="Your Name" required/>
+      <input type="email" id="cEmail" placeholder="Email Address" required/>
+      <input type="tel" id="cPhone" placeholder="Phone Number"/>
+      <textarea id="cMsg" placeholder="Your message..." rows="4" required></textarea>
+      <button type="submit" class="btn-primary" style="width:100%">Send Message</button>
+      <div id="contactSuccess" class="success-msg" style="display:none">✅ Thank you! We'll reply within 24 hours.</div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand" style="flex-direction:column;align-items:flex-start;gap:2px">
+        <span class="brand-hi">AAKRUTI</span>
+        <span class="brand-lo">SHRINGAR</span>
+      </div>
+      <p>Premium cosmetics delivered with love across India.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <a href="#home">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#about">About Us</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-links">
+      <h4>Policies</h4>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Return Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Shipping Info</a>
+    </div>
+    <div class="footer-newsletter">
+      <h4>Stay Beautiful</h4>
+      <p>Subscribe for offers & new arrivals</p>
+      <div class="newsletter-row">
+        <input type="email" placeholder="your@email.com"/>
+        <button>→</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 AAKRUTI SHRINGAR. All rights reserved. Made with ❤️ in Latur, Maharashtra</p>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button onclick="toggleCart()" class="close-btn">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"><p class="empty-cart">Your cart is empty 🛒</p></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">Total: <strong id="cartTotal">₹0</strong></div>
+    <button class="btn-primary" style="width:100%" onclick="checkout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <button class="close-btn" onclick="document.getElementById('orderModal').classList.remove('open')">✕</button>
+    <h2>Place Your Order</h2>
+    <p style="color:#888;margin-bottom:1.5rem;font-family:Jost,sans-serif;font-size:0.9rem">Fill in your details and we'll call you back!</p>
+    <form id="orderForm" onsubmit="submitOrder(event)">
+      <input type="text" id="oName" placeholder="Full Name" required/>
+      <input type="tel" id="oPhone" placeholder="Phone Number" required/>
+      <input type="text" id="oAddress" placeholder="Delivery Address" required/>
+      <input type="text" id="oCity" placeholder="City / District" required/>
+      <input type="text" id="oPincode" placeholder="PIN Code" required/>
+      <textarea id="oProducts" placeholder="Products you want to order..." rows="3" required></textarea>
+      <select id="oPayment">
+        <option value="cod">Cash on Delivery</option>
+        <option value="upi">UPI / GPay</option>
+        <option value="card">Credit / Debit Card</option>
+      </select>
+      <button type="submit" class="btn-primary" style="width:100%;margin-top:0.5rem">Place Order ✦</button>
+      <div id="orderSuccess" class="success-msg" style="display:none">🎉 Order placed! Generating your receipt...</div>
+    </form>
+  </div>
+</div>
+
+<!-- RECEIPT MODAL -->
+<div class="modal-overlay" id="receiptModal">
+  <div class="modal receipt-modal">
+    <div class="receipt-header">
+      <div class="receipt-logo">
+        <span class="brand-hi" style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;letter-spacing:3px;color:var(--dark)">AAKRUTI</span>
+        <span class="brand-lo" style="font-family:Jost,sans-serif;font-size:0.6rem;letter-spacing:6px;color:var(--gold);text-transform:uppercase;display:block">SHRINGAR</span>
+      </div>
+      <div class="receipt-tag">ORDER RECEIPT</div>
+    </div>
+
+    <div class="receipt-divider">✦ ─────────────── ✦</div>
+
+    <div class="receipt-meta">
+      <div><span>Order ID</span><strong id="rOrderId">#AS-00001</strong></div>
+      <div><span>Date</span><strong id="rDate"></strong></div>
+      <div><span>Payment</span><strong id="rPayment"></strong></div>
+      <div><span>Status</span><strong style="color:#2d6a4f">✅ Confirmed</strong></div>
+    </div>
+
+    <div class="receipt-section-title">Delivery Details</div>
+    <div class="receipt-address" id="rAddress"></div>
+
+    <div class="receipt-section-title" style="margin-top:1.5rem">Items Ordered</div>
+    <div class="receipt-items" id="rItems"></div>
+
+    <div class="receipt-total-row">
+      <span>Grand Total</span>
+      <span id="rTotal" style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold)"></span>
+    </div>
+
+    <div class="receipt-divider" style="margin-top:1.5rem">✦ ─────────────── ✦</div>
+    <p class="receipt-note">Thank you for shopping with us! Your order will be delivered within 24–48 hours. We'll confirm via SMS shortly.</p>
+
+    <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap">
+      <button class="btn-primary" style="flex:1" onclick="printReceipt()">🖨 Print Receipt</button>
+      <button class="btn-ghost" style="flex:1" onclick="openFeedback()">Leave Feedback ✦</button>
+    </div>
+    <button class="close-btn" style="position:absolute;top:1.5rem;right:1.5rem;font-size:1.2rem" onclick="closeReceipt()">✕</button>
+  </div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div class="modal-overlay" id="feedbackModal">
+  <div class="modal">
+    <button class="close-btn" style="position:absolute;top:1.5rem;right:1.5rem;font-size:1.2rem" onclick="document.getElementById('feedbackModal').classList.remove('open')">✕</button>
+    <h2>Share Your Experience</h2>
+    <p style="color:#888;margin-bottom:1.5rem;font-family:Jost,sans-serif;font-size:0.9rem">Your feedback helps us improve 💛</p>
+
+    <div class="star-rating" id="starRating">
+      <span onclick="setRating(1)">★</span>
+      <span onclick="setRating(2)">★</span>
+      <span onclick="setRating(3)">★</span>
+      <span onclick="setRating(4)">★</span>
+      <span onclick="setRating(5)">★</span>
+    </div>
+    <p id="ratingLabel" style="text-align:center;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:1.2rem"></p>
+
+    <form id="feedbackForm" onsubmit="submitFeedback(event)">
+      <input type="text" id="fbName" placeholder="Your Name" required/>
+      <select id="fbCategory">
+        <option value="delivery">Delivery Speed</option>
+        <option value="quality">Product Quality</option>
+        <option value="packaging">Packaging</option>
+        <option value="overall">Overall Experience</option>
+      </select>
+      <textarea id="fbMsg" placeholder="Tell us about your experience..." rows="4" required></textarea>
+      <button type="submit" class="btn-primary" style="width:100%;margin-top:0.5rem">Submit Feedback ✦</button>
+      <div id="feedbackSuccess" class="success-msg" style="display:none">🌸 Thank you! Your feedback means the world to us.</div>
+    </form>
+  </div>
+</div>
+
+<script src="app.js"></script>

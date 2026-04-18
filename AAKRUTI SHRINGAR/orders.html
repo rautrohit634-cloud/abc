@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recent Orders – AAKRUTI SHRINGAR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Page Layout ── */
+    body { background: #f7f2ec; }
+    .orders-page { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+
+    /* ── Page Header ── */
+    .page-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 2.5rem; padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem; font-weight: 300; color: var(--dark);
+    }
+    .page-header h1 em { font-style: italic; color: var(--gold); }
+    .page-header p { font-size: 0.82rem; color: var(--text-muted); letter-spacing: 1px; }
+
+    /* ── Summary Cards ── */
+    .summary-cards {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
+    .sum-card {
+      background: white; border: 1px solid var(--border);
+      padding: 1.5rem; text-align: center;
+    }
+    .sum-card .val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 600; color: var(--gold); display: block;
+    }
+    .sum-card .lbl { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+
+    /* ── Search & Filter Bar ── */
+    .filter-bar {
+      display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .filter-bar input, .filter-bar select {
+      border: 1px solid var(--border); background: white;
+      padding: 10px 14px; font-family: 'Jost', sans-serif;
+      font-size: 0.85rem; color: var(--text); outline: none;
+      transition: border-color .2s;
+    }
+    .filter-bar input { flex: 1; min-width: 180px; }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--gold); }
+
+    /* ── Orders Table ── */
+    .orders-table-wrap { overflow-x: auto; }
+    .orders-table {
+      width: 100%; border-collapse: collapse;
+      background: white; font-size: 0.88rem;
+    }
+    .orders-table thead tr {
+      background: var(--dark); color: var(--gold);
+    }
+    .orders-table thead th {
+      padding: 1rem 1.2rem; text-align: left;
+      font-family: 'Jost', sans-serif; font-size: 0.7rem;
+      font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .orders-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .15s; cursor: pointer;
+    }
+    .orders-table tbody tr:hover { background: var(--blush); }
+    .orders-table td {
+      padding: 1rem 1.2rem; color: var(--text);
+      vertical-align: middle;
+    }
+    .orders-table td .name { font-weight: 500; color: var(--dark); }
+    .orders-table td .sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+    .order-id-cell {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--gold); font-weight: 600;
+    }
+    .amount-cell {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; color: var(--dark);
+    }
+
+    /* ── Status Badge ── */
+    .status-badge {
+      display: inline-block; padding: 3px 10px;
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 1px;
+      text-transform: uppercase; border-radius: 0;
+    }
+    .status-pending   { background: #fff8e1; color: #b8860b; border: 1px solid #f0d060; }
+    .status-confirmed { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .status-shipped   { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+    .status-delivered { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+    .status-cancelled { background: #fce4ec; color: #c62828; border: 1px solid #ef9a9a; }
+
+    /* ── Action Buttons ── */
+    .action-btn {
+      background: none; border: 1px solid var(--border);
+      cursor: pointer; padding: 5px 10px; font-size: 0.75rem;
+      font-family: 'Jost', sans-serif; color: var(--text-muted);
+      transition: all .2s; margin-right: 4px;
+    }
+    .action-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .action-btn.danger:hover { border-color: #e57373; color: #c62828; }
+
+    /* ── Empty State ── */
+    .empty-orders {
+      text-align: center; padding: 5rem 2rem;
+      background: white; border: 1px solid var(--border);
+    }
+    .empty-orders .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .empty-orders h3 {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
+      color: var(--dark); margin-bottom: 0.5rem;
+    }
+    .empty-orders p { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* ── Order Detail Panel ── */
+    .detail-panel-overlay {
+      position: fixed; inset: 0; background: rgba(26,18,8,0.5);
+      z-index: 2000; opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .detail-panel-overlay.open { opacity: 1; pointer-events: all; }
+    .detail-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 440px;
+      background: var(--cream); z-index: 2100;
+      transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+      box-shadow: -8px 0 40px rgba(26,18,8,0.18);
+      overflow-y: auto; padding: 2.5rem 2rem;
+    }
+    .detail-panel.open { transform: translateX(0); }
+    .detail-panel h2 {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
+      font-weight: 300; margin-bottom: 0.5rem; color: var(--dark);
+    }
+    .detail-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      background: none; border: none; cursor: pointer;
+      font-size: 1.2rem; color: var(--text-muted);
+    }
+    .detail-close:hover { color: var(--dark); }
+    .detail-row {
+      display: flex; justify-content: space-between; padding: 0.7rem 0;
+      border-bottom: 1px solid var(--border); font-size: 0.88rem;
+    }
+    .detail-row span:first-child { color: var(--text-muted); }
+    .detail-row span:last-child { font-weight: 500; text-align: right; max-width: 60%; }
+    .detail-items-title {
+      font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin: 1.5rem 0 0.75rem;
+    }
+    .detail-item {
+      display: flex; justify-content: space-between;
+      padding: 0.5rem 0; font-size: 0.88rem; border-bottom: 1px dashed var(--border);
+    }
+    .detail-total {
+      display: flex; justify-content: space-between; margin-top: 0.75rem;
+      font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+      font-weight: 600; color: var(--dark);
+    }
+    .status-update-row { margin-top: 1.5rem; }
+    .status-update-row label { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.5rem; }
+    .status-update-row select {
+      width: 100%; border: 1px solid var(--border);
+      background: white; padding: 10px 14px;
+      font-family: 'Jost', sans-serif; font-size: 0.88rem;
+      color: var(--text); outline: none; margin-bottom: 0.75rem;
+    }
+
+    /* ── Pagination ── */
+    .pagination { display: flex; gap: 0.5rem; margin-top: 1.5rem; justify-content: center; }
+    .page-btn {
+      border: 1px solid var(--border); background: white;
+      padding: 7px 14px; cursor: pointer; font-size: 0.82rem;
+      font-family: 'Jost', sans-serif; color: var(--text-muted);
+      transition: all .2s;
+    }
+    .page-btn:hover, .page-btn.active { background: var(--dark); color: var(--gold); border-color: var(--dark); }
+
+    /* ── Feedback Section ── */
+    .feedback-section { margin-top: 3rem; }
+    .feedback-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .feedback-header h2 {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--dark);
+    }
+    .feedback-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .fb-card {
+      background: white; border: 1px solid var(--border); padding: 1.5rem;
+      transition: transform .2s;
+    }
+    .fb-card:hover { transform: translateY(-3px); }
+    .fb-stars { color: var(--gold); font-size: 1rem; margin-bottom: 0.5rem; }
+    .fb-card p { font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); font-style: italic; margin-bottom: 0.75rem; }
+    .fb-meta { font-size: 0.75rem; color: var(--gold); letter-spacing: 1px; }
+
+    @media (max-width: 800px) {
+      .summary-cards { grid-template-columns: 1fr 1fr; }
+      .detail-panel { width: 100%; }
+    }
+    @media (max-width: 500px) {
+      .summary-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" style="text-decoration:none">
+      <div class="brand">
+        <span class="brand-hi">AAKRUTI</span>
+        <span class="brand-lo">SHRINGAR</span>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#products">Shop</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="orders.html" style="color:var(--gold);font-weight:500">📋 Orders</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="index.html" class="nav-cta" style="text-decoration:none">← Back to Shop</a>
+    </div>
+  </div>
+</header>
+
+<div class="orders-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1>Recent <em>Orders</em></h1>
+      <p id="orderSubtitle">Loading orders...</p>
+    </div>
+    <div style="display:flex;gap:0.75rem">
+      <button class="action-btn" onclick="refreshOrders()">↻ Refresh</button>
+      <button class="action-btn danger" onclick="clearAllOrders()">🗑 Clear All</button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="sum-card">
+      <span class="val" id="sTotal">0</span>
+      <span class="lbl">Total Orders</span>
+    </div>
+    <div class="sum-card">
+      <span class="val" id="sRevenue">₹0</span>
+      <span class="lbl">Total Revenue</span>
+    </div>
+    <div class="sum-card">
+      <span class="val" id="sPending">0</span>
+      <span class="lbl">Pending</span>
+    </div>
+    <div class="sum-card">
+      <span class="val" id="sDelivered">0</span>
+      <span class="lbl">Delivered</span>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="🔍  Search by name, phone or order ID..." oninput="renderTable()"/>
+    <select id="statusFilter" onchange="renderTable()">
+      <option value="">All Statuses</option>
+      <option value="confirmed">Confirmed</option>
+      <option value="pending">Pending</option>
+      <option value="shipped">Shipped</option>
+      <option value="delivered">Delivered</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+    <select id="paymentFilter" onchange="renderTable()">
+      <option value="">All Payments</option>
+      <option value="cod">Cash on Delivery</option>
+      <option value="upi">UPI / GPay</option>
+      <option value="card">Card</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="orders-table-wrap" id="tableWrap"></div>
+  <div class="pagination" id="pagination"></div>
+
+  <!-- Feedback Section -->
+  <div class="feedback-section">
+    <div class="feedback-header">
+      <h2>Customer <em>Feedback</em></h2>
+      <span id="fbCount" style="font-size:0.8rem;color:var(--text-muted)"></span>
+    </div>
+    <div class="feedback-cards" id="feedbackCards">
+      <p style="color:var(--text-muted);font-size:0.9rem">No feedback yet.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Order Detail Side Panel -->
+<div class="detail-panel-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+  <button class="detail-close" onclick="closeDetail()">✕</button>
+  <h2 id="dpTitle">Order Details</h2>
+  <div style="color:var(--gold);font-size:0.78rem;letter-spacing:2px;margin-bottom:1.5rem" id="dpOrderId"></div>
+  <div id="dpContent"></div>
+</div>
+
+<script>
+  let allOrders = [];
+  let currentPage = 1;
+  const PER_PAGE = 10;
+
+  // ── Load from localStorage + try API ──
+  function loadOrders() {
+    const local = JSON.parse(localStorage.getItem('aakruti_orders') || '[]');
+    // Try to fetch from API and merge
+    fetch('/api/orders')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.orders.length > 0) {
+          // Merge: API orders take priority, local fills gaps
+          const apiIds = new Set(data.orders.map(o => String(o.id)));
+          const localOnly = local.filter(o => !apiIds.has(String(o.id)));
+          allOrders = [...data.orders.map(o => ({
+            id: 'AS-' + String(o.id).padStart(5,'0'),
+            name: o.name, phone: o.phone,
+            address: o.address, city: o.city, pincode: o.pincode,
+            products: o.products, payment_method: o.payment_method,
+            total_amount: parseFloat(o.total_amount)||0,
+            cart_items: tryParse(o.cart_items),
+            status: o.status, created_at: o.created_at,
+          })), ...localOnly];
+        } else {
+          allOrders = local;
+        }
+        init();
+      })
+      .catch(() => { allOrders = local; init(); });
+  }
+
+  function tryParse(v) {
+    if (Array.isArray(v)) return v;
+    try { return JSON.parse(v) || []; } catch { return []; }
+  }
+
+  function init() {
+    updateSummary();
+    renderTable();
+    renderFeedbacks();
+    document.getElementById('orderSubtitle').textContent =
+      allOrders.length + ' order' + (allOrders.length !== 1 ? 's' : '') + ' found';
+  }
+
+  function updateSummary() {
+    document.getElementById('sTotal').textContent = allOrders.length;
+    const rev = allOrders.reduce((s,o) => s + (parseFloat(o.total_amount)||0), 0);
+    document.getElementById('sRevenue').textContent = '₹' + rev.toLocaleString('en-IN');
+    document.getElementById('sPending').textContent = allOrders.filter(o => o.status === 'pending' || o.status === 'confirmed').length;
+    document.getElementById('sDelivered').textContent = allOrders.filter(o => o.status === 'delivered').length;
+  }
+
+  function filteredOrders() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const sf = document.getElementById('statusFilter').value;
+    const pf = document.getElementById('paymentFilter').value;
+    return allOrders.filter(o => {
+      const matchQ = !q || o.name.toLowerCase().includes(q) ||
+        o.phone.includes(q) || String(o.id).toLowerCase().includes(q);
+      const matchS = !sf || o.status === sf;
+      const matchP = !pf || o.payment_method === pf;
+      return matchQ && matchS && matchP;
+    });
+  }
+
+  function renderTable() {
+    const filtered = filteredOrders();
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+    currentPage = Math.min(currentPage, totalPages);
+    const page = filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
+
+    const wrap = document.getElementById('tableWrap');
+    if (filtered.length === 0) {
+      wrap.innerHTML = `<div class="empty-orders">
+        <div class="icon">📦</div>
+        <h3>No Orders Yet</h3>
+        <p>Place an order from the shop and it will appear here.</p>
+      </div>`;
+      document.getElementById('pagination').innerHTML = '';
+      return;
+    }
+
+    const payLabels = { cod:'Cash on Delivery', upi:'UPI / GPay', card:'Card' };
+    wrap.innerHTML = `<table class="orders-table">
+      <thead><tr>
+        <th>Order ID</th><th>Customer</th><th>Location</th>
+        <th>Items</th><th>Amount</th><th>Payment</th>
+        <th>Status</th><th>Date</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        ${page.map((o,i) => `
+          <tr onclick="openDetail('${encodeURIComponent(JSON.stringify(o))}')">
+            <td class="order-id-cell">#${o.id}</td>
+            <td><div class="name">${o.name}</div><div class="sub">📞 ${o.phone}</div></td>
+            <td><div class="name">${o.city}</div><div class="sub">${o.pincode}</div></td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.products}</td>
+            <td class="amount-cell">₹${Number(o.total_amount||0).toLocaleString('en-IN')}</td>
+            <td><span style="font-size:0.8rem">${payLabels[o.payment_method]||o.payment_method}</span></td>
+            <td><span class="status-badge status-${o.status||'confirmed'}">${o.status||'confirmed'}</span></td>
+            <td style="font-size:0.8rem;white-space:nowrap">${formatDate(o.created_at)}</td>
+            <td onclick="event.stopPropagation()">
+              <button class="action-btn" onclick="openDetail('${encodeURIComponent(JSON.stringify(o))}')">View</button>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+
+    // Pagination
+    const pg = document.getElementById('pagination');
+    if (totalPages <= 1) { pg.innerHTML = ''; return; }
+    pg.innerHTML = Array.from({length: totalPages}, (_,i) =>
+      `<button class="page-btn ${i+1===currentPage?'active':''}" onclick="goPage(${i+1})">${i+1}</button>`
+    ).join('');
+  }
+
+  function goPage(p) { currentPage = p; renderTable(); window.scrollTo(0,0); }
+
+  function formatDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'2-digit'}) + ' ' +
+           d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  }
+
+  // ── Detail Panel ──
+  function openDetail(encoded) {
+    const o = JSON.parse(decodeURIComponent(encoded));
+    document.getElementById('dpTitle').textContent = o.name;
+    document.getElementById('dpOrderId').textContent = '#' + o.id + ' · ' + formatDate(o.created_at);
+    const payLabels = { cod:'Cash on Delivery', upi:'UPI / GPay', card:'Credit/Debit Card' };
+    const items = Array.isArray(o.cart_items) && o.cart_items.length > 0
+      ? o.cart_items.map(i => `<div class="detail-item"><span>${i.name} ×${i.qty}</span><span>₹${(i.price*i.qty).toLocaleString('en-IN')}</span></div>`).join('')
+      : `<div class="detail-item"><span>${o.products}</span><span></span></div>`;
+
+    document.getElementById('dpContent').innerHTML = `
+      <div class="detail-row"><span>Phone</span><span>${o.phone}</span></div>
+      <div class="detail-row"><span>Address</span><span>${o.address}, ${o.city} – ${o.pincode}</span></div>
+      <div class="detail-row"><span>Payment</span><span>${payLabels[o.payment_method]||o.payment_method}</span></div>
+      <div class="detail-row"><span>Status</span><span><span class="status-badge status-${o.status||'confirmed'}">${o.status||'confirmed'}</span></span></div>
+
+      <div class="detail-items-title">Items Ordered</div>
+      ${items}
+      <div class="detail-total"><span>Total</span><span>₹${Number(o.total_amount||0).toLocaleString('en-IN')}</span></div>
+
+      <div class="status-update-row">
+        <label>Update Status</label>
+        <select id="statusSelect">
+          <option value="pending" ${o.status==='pending'?'selected':''}>Pending</option>
+          <option value="confirmed" ${o.status==='confirmed'?'selected':''}>Confirmed</option>
+          <option value="shipped" ${o.status==='shipped'?'selected':''}>Shipped</option>
+          <option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option>
+          <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
+        </select>
+        <button class="btn-primary" style="width:100%" onclick="updateStatus('${o.id}')">Update Status ✦</button>
+      </div>
+    `;
+
+    document.getElementById('detailPanel').classList.add('open');
+    document.getElementById('detailOverlay').classList.add('open');
+    document.getElementById('detailPanel').dataset.orderId = o.id;
+  }
+
+  function closeDetail() {
+    document.getElementById('detailPanel').classList.remove('open');
+    document.getElementById('detailOverlay').classList.remove('open');
+  }
+
+  function updateStatus(orderId) {
+    const newStatus = document.getElementById('statusSelect').value;
+    // Update in memory
+    const idx = allOrders.findIndex(o => o.id === orderId || String(o.id) === String(orderId));
+    if (idx !== -1) {
+      allOrders[idx].status = newStatus;
+      // Update localStorage
+      localStorage.setItem('aakruti_orders', JSON.stringify(allOrders));
+    }
+    // Try API
+    const numericId = parseInt(orderId.replace('AS-',''));
+    if (!isNaN(numericId)) {
+      fetch(`/api/orders/${numericId}`, {
+        method: 'PATCH', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({status: newStatus})
+      }).catch(()=>{});
+    }
+    closeDetail();
+    updateSummary();
+    renderTable();
+    showToastOrders(`Order ${orderId} marked as ${newStatus}`);
+  }
+
+  function refreshOrders() { allOrders = []; loadOrders(); }
+
+  function clearAllOrders() {
+    if (!confirm('Clear all locally stored orders? This cannot be undone.')) return;
+    localStorage.removeItem('aakruti_orders');
+    allOrders = [];
+    updateSummary();
+    renderTable();
+  }
+
+  // ── Feedbacks ──
+  function renderFeedbacks() {
+    const feedbacks = JSON.parse(localStorage.getItem('aakruti_feedbacks') || '[]');
+    const el = document.getElementById('feedbackCards');
+    document.getElementById('fbCount').textContent = feedbacks.length + ' review' + (feedbacks.length !== 1 ? 's' : '');
+    if (feedbacks.length === 0) {
+      el.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem">No feedback yet.</p>';
+      return;
+    }
+    el.innerHTML = feedbacks.map(f => `
+      <div class="fb-card">
+        <div class="fb-stars">${'★'.repeat(f.rating||5)}${'☆'.repeat(5-(f.rating||5))}</div>
+        <p>"${f.message}"</p>
+        <div class="fb-meta">— ${f.name} · ${f.category} · ${new Date(f.created_at).toLocaleDateString('en-IN')}</div>
+      </div>
+    `).join('');
+  }
+
+  // ── Toast ──
+  function showToastOrders(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = `position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+      background:var(--dark);color:var(--cream);padding:12px 24px;
+      font-family:Jost,sans-serif;font-size:0.85rem;z-index:9999;
+      letter-spacing:1px;box-shadow:0 8px 32px rgba(0,0,0,.3);animation:fadeUp .3s both`;
+    t.textContent = '✦  ' + msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  // ── Boot ──
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+  loadOrders();
+</script>
+</body>
+</html>
